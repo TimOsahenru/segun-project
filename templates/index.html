@@ -1,1 +1,15 @@
-Cool!
+<header>
+    <a href="#">Login</a>
+    <p>{{request.user.username|title}}'s profile</p>
+</header>
+
+<div class="container">
+    {% for house in houses %}
+    <a href="{% url 'house' house.id %}">
+        <h4>{{house.location}}</h4>
+        <h5>{{house.house_type}}</h5>
+        <p>{{house.price|floatformat:2}}</p>
+    </a>
+    <hr>
+    {% endfor %}
+</div>

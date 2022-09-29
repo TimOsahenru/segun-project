@@ -1,0 +1,17 @@
+<a href="/">back</a>
+<div class="container">
+    <h4>{{house.location}}</h4>
+    <h5>{{house.house_type}}</h5>
+    <p>{{house.price|floatformat:2}}</p>
+    <p>{{house.description}}</p>
+    <hr>
+</div>
+
+<div class="container">
+    <h4>Agent contact</h4>
+    <h5>First Name: {{house.agent.first_name|title}}</h5>
+    <h5>Second Name: </h5>
+    <h5>Name: </h5>
+    <h5>Name: </h5>
+    <a href="{% url 'profile' house.agent.username %}">Other projects</a>
+</div>

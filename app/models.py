@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Agent(AbstractUser):
-    username = models.CharField(max_length=100)
+    username = models.CharField(unique=True, max_length=100)
     email = models.EmailField(unique=True, null=True, blank=True)
     about = models.TextField(null=True, blank=True)
     skype = models.URLField(null=True, blank=True)
