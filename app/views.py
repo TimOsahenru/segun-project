@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
@@ -36,6 +37,25 @@ class AgentProfile(DetailView):
         context['agent'] = Agent.objects.get(username=pk)
         context['houses'] = context['agent'].house_set.all()
         return context
+
+
+# ..................... Profile Update ......................................
+class ProfileUpdate(UpdateView):
+    model = Agent
+    fields = ['first_name', 'last_name', 'email', 'about', 'skype']
+    template_name = '../templates/profile_update.html'
+    # success_url = reverse_lazy('profile', pk=request.user.username)
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        agent = Agent.objects.get(username=pk)
+        return agent
+    
+    def form_valid(self, form):
+        if form.is_valid():
+            form.save()
+            return redirect('profile', pk=self.request.user.username)
+        return super(ProfileUpdate, self).form_valid()
 
 
 # ..................... House Update ......................................

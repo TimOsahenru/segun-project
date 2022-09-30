@@ -4,9 +4,9 @@
     <h4>Agent contact</h4>
     <h5>First Name: {{agent.first_name|title}}</h5>
     <h5>Second Name: {{agent.second_name|title}}</h5>
+    <h5>About me: {{agent.about}} </h5>
     <h5>Name: </h5>
-    <h5>Name: </h5>
-    <a href="#">Update agent profile</a>
+    <a href="{% url 'profile-update' agent.username %}">Update agent profile</a>
 </div>
 <hr>
 <div class="container">
