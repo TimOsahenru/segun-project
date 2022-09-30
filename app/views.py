@@ -44,13 +44,12 @@ class ProfileUpdate(UpdateView):
     model = Agent
     fields = ['first_name', 'last_name', 'email', 'about', 'skype']
     template_name = '../templates/profile_update.html'
-    # success_url = reverse_lazy('profile', pk=request.user.username)
 
     def get_object(self):
         pk = self.kwargs.get('pk')
         agent = Agent.objects.get(username=pk)
         return agent
-    
+
     def form_valid(self, form):
         if form.is_valid():
             form.save()
@@ -62,5 +61,10 @@ class ProfileUpdate(UpdateView):
 class HouseUpdate(UpdateView):
     model = House
     template_name = '../templates/edit.html'
-    success_url = 'houses'  # Change to profile
-
+    fields = '__all__'
+    
+    def form_valid(self, form):
+        if form.is_valid():
+            form.save()
+            return redirect('profile', pk=self.request.user.username)
+        return super(HouseUpdate, self).form_valid()
