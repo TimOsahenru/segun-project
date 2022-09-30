@@ -25,7 +25,17 @@ class AgentProfile(DetailView):
     template_name = '../templates/profile.html'
     context_object_name = 'agent'
 
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        agent = Agent.objects.get(username=pk)
+        return agent
 
+    def get_context_data(self, **kwargs):
+        context = super(AgentProfile, self).get_context_data()
+        pk = self.kwargs.get('pk')
+        context['agent'] = Agent.objects.get(username=pk)
+        context['houses'] = context['agent'].house_set.all()
+        return context
 
 
 # ..................... House Update ......................................

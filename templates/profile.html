@@ -10,8 +10,12 @@
 </div>
 <hr>
 <div class="container">
-    <h4>{{house.location}}</h4>
-    <h5>{{house.house_type}}</h5>
-    <p>{{house.price|floatformat:2}}</p>
-    <p>{{house.description}}</p>
+    {% for house in houses %}
+    <a href="#">
+        <h4>{{house.location}}</h4>
+        <h5>{{house.house_type}}</h5>
+        <p>{{house.price|floatformat:2}}</p>
+        <p>{{house.description}}</p>
+    </a>
+    {% endfor %}
 </div>
