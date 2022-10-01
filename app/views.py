@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView, CreateView
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from .models import *
 
 
@@ -83,3 +83,39 @@ class HouseCreate(CreateView):
             form.save()
             return redirect('profile', pk=self.request.user.username)
         return super(HouseCreate, self).form_valid(form)
+
+
+# ..................... House Delete ......................................
+class HouseDelete(DeleteView):
+    model = House
+    template_name = '../templates/delete.html'
+    # success_url = reverse_lazy('houses')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            pk = self.kwargs.get('pk')
+            house = House.objects.get(id=pk)
+            house.delete()
+            return redirect('profile', pk=self.request.user.username)
+        return super(HouseDelete, self).form_valid()
+
+    # def get_success_url(self):
+
+    # def delete(self, request, *args, **kwargs):
+    #     pk = self.kwargs.get('pk')
+    #     house = House.objects.get(id=pk)
+    #     house.delete()
+    #     return redirect('profile', pk=self.request.user.username)
+
+    # def get_object(self, **kwargs):
+    #     pk = self.kwargs.get('pk')
+    #     agent = Agent.objects.get(username=pk)
+    #     return agent
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super(HouseDelete, self).get_context_data()
+    #     pk = self.kwargs.get('pk')
+    #     context['house'] = House.objects.get(id=pk)
+    #     return context
+    #
+

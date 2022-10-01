@@ -1,0 +1,9 @@
+<header>
+    <a href="/">back</a>
+</header>
+<p>Are you sure you want to delete this object?</p>
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Delete">
+</form>
