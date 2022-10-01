@@ -9,6 +9,7 @@
     <a href="{% url 'profile-update' agent.username %}">Update agent profile</a>
 </div>
 <hr>
+<a href="{% url 'create' %}">Create object</a>
 <div class="container">
     {% for house in houses %}
     <a href="{% url 'house' house.id %}">

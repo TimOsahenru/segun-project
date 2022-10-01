@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from app.views import HouseList, HouseDetail, AgentProfile, ProfileUpdate, HouseUpdate
+from app.views import HouseList, HouseDetail, AgentProfile, ProfileUpdate, HouseUpdate, HouseCreate
 
 
 urlpatterns = [
@@ -9,5 +9,6 @@ urlpatterns = [
     path('profile-update/<str:pk>/', ProfileUpdate.as_view(), name='profile-update'),
     path('detail/<str:pk>/', HouseDetail.as_view(), name='house'),
     path('update/<str:pk>/', HouseUpdate.as_view(), name='update'),
+    path('create/', HouseCreate.as_view(), name='create'),
     path('admin/', admin.site.urls),
 ]

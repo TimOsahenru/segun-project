@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, CreateView
 from .models import *
 
 
@@ -68,3 +68,18 @@ class HouseUpdate(UpdateView):
             form.save()
             return redirect('profile', pk=self.request.user.username)
         return super(HouseUpdate, self).form_valid()
+
+
+# ..................... House Create ......................................
+class HouseCreate(CreateView):
+    model = House
+    template_name = '../templates/create.html'
+    fields = '__all__'
+    
+    def form_valid(self, form):
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.agent = self.request.user
+            form.save()
+            return redirect('profile', pk=self.request.user.username)
+        return super(HouseCreate, self).form_valid(form)
