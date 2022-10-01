@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path
-from app.views import HouseList, HouseDetail, AgentProfile, ProfileUpdate, HouseUpdate, HouseCreate, HouseDelete
+from app.views import HouseList, HouseDetail, AgentProfile, ProfileUpdate, \
+    HouseUpdate, HouseCreate, HouseDelete, LoginUser
+from django.contrib.auth.views import LogoutView
 
 
 urlpatterns = [
@@ -11,5 +13,7 @@ urlpatterns = [
     path('update/<str:pk>/', HouseUpdate.as_view(), name='update'),
     path('create/', HouseCreate.as_view(), name='create'),
     path('delete/<str:pk>/', HouseDelete.as_view(), name='delete'),
+    path('login/', LoginUser.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('admin/', admin.site.urls),
 ]

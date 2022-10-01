@@ -1,6 +1,10 @@
 <header>
-    <a href="#">Login</a>
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}">Logout</a>
     <p>{{request.user.username|title}}'s profile</p>
+    {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    {% endif %}
 </header>
 
 <div class="container">
@@ -10,7 +14,6 @@
         <h5>{{house.house_type}}</h5>
         <p>{{house.price|floatformat:2}}</p>
     </a>
-    <a href="{% url 'delete' house.id %}">Delete</a>
     <hr>
     {% endfor %}
 </div>

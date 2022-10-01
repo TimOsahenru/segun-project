@@ -3,7 +3,11 @@ from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from django.contrib.auth.views import LoginView
 from .models import *
+from .forms import *
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login, authenticate
 
 
 # ..................... All Houses ......................................
@@ -40,10 +44,11 @@ class AgentProfile(DetailView):
 
 
 # ..................... Profile Update ......................................
-class ProfileUpdate(UpdateView):
+class ProfileUpdate(LoginRequiredMixin, UpdateView):
     model = Agent
     fields = ['first_name', 'last_name', 'email', 'about', 'skype']
     template_name = '../templates/profile_update.html'
+    login_url = 'login'
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -54,27 +59,32 @@ class ProfileUpdate(UpdateView):
         if form.is_valid():
             form.save()
             return redirect('profile', pk=self.request.user.username)
-        return super(ProfileUpdate, self).form_valid()
+        return super(ProfileUpdate, self).form_valid(form)
 
 
 # ..................... House Update ......................................
-class HouseUpdate(UpdateView):
+class HouseUpdate(LoginRequiredMixin, UpdateView):
     model = House
     template_name = '../templates/edit.html'
-    fields = '__all__'
+    form_class = HouseForm
+    login_url = 'login'
+    # fields = '__all__'
+    # exclude = ['agent']
     
     def form_valid(self, form):
         if form.is_valid():
             form.save()
             return redirect('profile', pk=self.request.user.username)
-        return super(HouseUpdate, self).form_valid()
+        return super(HouseUpdate, self).form_valid(form)
 
 
 # ..................... House Create ......................................
-class HouseCreate(CreateView):
+class HouseCreate(LoginRequiredMixin, CreateView):
     model = House
     template_name = '../templates/create.html'
-    fields = '__all__'
+    form_class = HouseForm
+    login_url = 'login'
+    # fields = '__all__' can not be used because of no exclude attribute
     
     def form_valid(self, form):
         if form.is_valid():
@@ -86,10 +96,10 @@ class HouseCreate(CreateView):
 
 
 # ..................... House Delete ......................................
-class HouseDelete(DeleteView):
+class HouseDelete(LoginRequiredMixin, DeleteView):
     model = House
     template_name = '../templates/delete.html'
-    # success_url = reverse_lazy('houses')
+    login_url = 'login'
 
     def form_valid(self, form):
         if form.is_valid():
@@ -97,25 +107,28 @@ class HouseDelete(DeleteView):
             house = House.objects.get(id=pk)
             house.delete()
             return redirect('profile', pk=self.request.user.username)
-        return super(HouseDelete, self).form_valid()
+        return super(HouseDelete, self).form_valid(form)
+
+
+# ..................... Login User ......................................
+class LoginUser(LoginView):
+    template_name = '../templates/login.html'
+    redirect_authenticated_user = True
+    # next_page = 'houses'  # Change to profile later
+
+    def form_valid(self, form, *args, **kwargs):
+        email = self.request.POST.get('email')
+        password = self.request.POST.get('password')
+
+        user = authenticate(self.request, email=email, password=password)
+        if user is not None:
+            login(self.request, user)
+            return redirect('profile', pk=self.request.user.username)
+        return super(LoginUser, self).form_valid(form)
 
     # def get_success_url(self):
+    #     self.pk =
 
-    # def delete(self, request, *args, **kwargs):
-    #     pk = self.kwargs.get('pk')
-    #     house = House.objects.get(id=pk)
-    #     house.delete()
-    #     return redirect('profile', pk=self.request.user.username)
 
-    # def get_object(self, **kwargs):
-    #     pk = self.kwargs.get('pk')
-    #     agent = Agent.objects.get(username=pk)
-    #     return agent
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super(HouseDelete, self).get_context_data()
-    #     pk = self.kwargs.get('pk')
-    #     context['house'] = House.objects.get(id=pk)
-    #     return context
-    #
+# ..................... SignUp User ......................................
 
