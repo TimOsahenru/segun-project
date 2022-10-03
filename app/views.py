@@ -71,8 +71,6 @@ class HouseUpdate(LoginRequiredMixin, UpdateView):
     template_name = '../templates/edit.html'
     form_class = HouseForm
     login_url = 'login'
-    # fields = '__all__'
-    # exclude = ['agent']
     
     def form_valid(self, form):
         if form.is_valid():
@@ -118,22 +116,9 @@ class LoginUser(LoginView):
 
     template_name = '../templates/login.html'
     redirect_authenticated_user = True
-    # next_page = 'houses'  # Change to profile later
-
-    # def form_valid(self, form, *args, **kwargs):
-    #     email = self.request.POST.get('email')
-    #     password = self.request.POST.get('password')
-    #
-    #     user = authenticate(self.request, email=email, password=password)
-    #     if user is not None:
-    #         login(self.request, user)
-    #         return redirect('profile', pk=self.request.user.username)
-    #     return super(LoginUser, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('profile', args=[self.request.user.username])
-        # return reverse('profile', pk=self.request.user.username)
-
 
 # ..................... SignUp User ......................................
 class SignUpUser(CreateView):
@@ -142,7 +127,6 @@ class SignUpUser(CreateView):
     template_name = '../templates/signup.html'
 
     def form_valid(self, form):
-        # agent = Agent.objects.create_user(self, username=self.username, email=self.email, password1=self.password1)
         agent = form.save(commit=False)
         agent.username = agent.username.lower()
         agent = form.save()
@@ -151,19 +135,3 @@ class SignUpUser(CreateView):
             login(self.request, agent)
             return redirect('login')
         return super(SignUpUser, self).form_valid(form)
-            
-# class SignUpUser(FormView):
-#
-#     form_class = AgentCreationForm
-#     template_name = '../templates/signup.html'
-#
-#     def form_valid(self, form):
-#         if form.is_valid():
-#             user = form.save()
-#
-#             if user is not None:
-#                 login(self.request, user)
-#                 return redirect('profile', pk=self.request.user.username)
-#             return super(SignUpUser, self).form_valid(form)
-
-

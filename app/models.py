@@ -33,9 +33,9 @@ class House(models.Model):
     house_type = models.ForeignKey(HouseType, on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField()
     description = models.TextField()  # Change to CKEditor later
-    # image_one =
-    # image_two =
-    # image_three =
+    image_one = models.ImageField(null=True, blank=True)
+    image_two = models.ImageField(null=True, blank=True)
+    image_three = models.ImageField(null=True, blank=True)
     no_of_bedrooms = models.IntegerField()
     area_per_meter_square = models.IntegerField()
     no_of_bathroom = models.IntegerField()
@@ -54,6 +54,28 @@ class House(models.Model):
 
     def __str__(self):
         return self.agent.username
+
+    @property
+    def image_one_url(self):
+        try:
+            url = self.image_one.url
+        except:
+            url = ''
+        return url
+
+    def image_two_url(self):
+        try:
+            url = self.image_two.url
+        except:
+            url = ''
+        return url
+
+    def image_three_url(self):
+        try:
+            url = self.image_three.url
+        except:
+            url = ''
+        return url
 
     class Meta:
         ordering = ['-created']
