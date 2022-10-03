@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from app.views import HouseList, HouseDetail, AgentProfile, ProfileUpdate, \
-    HouseUpdate, HouseCreate, HouseDelete, LoginUser
+    HouseUpdate, HouseCreate, HouseDelete, LoginUser, SignUpUser
 from django.contrib.auth.views import LogoutView
 
 
@@ -15,5 +15,6 @@ urlpatterns = [
     path('delete/<str:pk>/', HouseDelete.as_view(), name='delete'),
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    path('signup/', SignUpUser.as_view(), name='signup'),
     path('admin/', admin.site.urls),
 ]
