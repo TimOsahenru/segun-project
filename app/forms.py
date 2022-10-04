@@ -46,3 +46,11 @@ class AgentUpdateForm(forms.ModelForm):
             'skype': forms.URLInput(attrs={'class': 'form-control'}),
         }
 
+
+class UserCreationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'})
+        }
