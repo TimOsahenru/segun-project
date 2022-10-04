@@ -9,6 +9,7 @@ from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import get_user_model
+from django.views.generic import View
 
 Agent = get_user_model()
 
@@ -49,7 +50,7 @@ class AgentProfile(DetailView):
 # ..................... Profile Update ......................................
 class ProfileUpdate(LoginRequiredMixin, UpdateView):
     model = Agent
-    fields = ['first_name', 'last_name', 'email', 'about', 'skype']
+    form_class = AgentUpdateForm
     template_name = '../templates/profile_update.html'
     login_url = 'login'
 
@@ -120,6 +121,7 @@ class LoginUser(LoginView):
     def get_success_url(self):
         return reverse('profile', args=[self.request.user.username])
 
+
 # ..................... SignUp User ......................................
 class SignUpUser(CreateView):
     form_class = AgentCreationForm
@@ -135,3 +137,33 @@ class SignUpUser(CreateView):
             login(self.request, agent)
             return redirect('login')
         return super(SignUpUser, self).form_valid(form)
+
+
+# ..................... About page ......................................
+# class AboutPage(View):
+#     # model = House
+#     template_name = '../templates/about.html'
+
+def about_page(request):
+    context = {}
+    return render(request, 'about.html', context)
+
+
+# ..................... Properties page ......................................
+# class PropertyPage(ListView):
+#     model = House
+#     template_name = '../templates/property.html'
+
+def property_page(request):
+    context = {}
+    return render(request, 'properties.html', context)
+
+
+# ..................... Contact page ......................................
+# class ContactPage(View):
+#     model = House
+#     template_name = '../templates/contact.html'
+
+def contact_page(request):
+    context = {}
+    return render(request, 'contact.html', context)

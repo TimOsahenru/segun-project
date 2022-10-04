@@ -5,9 +5,10 @@ from django.contrib.auth.models import AbstractUser
 class Agent(AbstractUser):
     username = models.CharField(unique=True, max_length=100)
     email = models.EmailField(unique=True, null=True, blank=True)
+    # phone_no =
     about = models.TextField(null=True, blank=True)
-    skype = models.URLField(null=True, blank=True)
-    # avatar =
+    skype = models.URLField(null=True, blank=True) # Skype username
+    avatar = models.ImageField(null=True, blank=True, default='avatar.svg')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -50,6 +51,7 @@ class House(models.Model):
     cable_tv = models.BooleanField(default=False)
     internet = models.BooleanField(default=False)
     concrete_flooring = models.BooleanField(default=False)
+    # count =
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,28 +1,172 @@
-<a href="/">back</a>
+{% extends 'base.html' %}
+{% block content %}
+<!--/ Intro Single star /-->
+<section class="intro-single">
+  <div class="container">
+    <div class="col-md-12">
+      <a style="margin-bottom: 40px;" class="btn btn-a" href="{{request.META.HTTP_REFERER}}">&#8592; back</a>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-lg-8">
+        <div class="title-single-box">
+          <h1 class="title-single">{{agent.first_name|title}} {{agent.last_name|title}}</h1>
+          <span class="color-text-a">Agent's profile </span>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-4">
+        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/">Agents</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              {{agent.username|title}} profile
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Intro Single End /-->
 
-<div class="container">
-    <h4>Agent contact</h4>
-    <h5>{{agent.username}}</h5>
-    <h5>First Name: {{agent.first_name|title}}</h5>
-    <h5>Second Name: {{agent.second_name|title}}</h5>
-    <h5>About me: {{agent.about}} </h5>
-    <h5>Name: </h5>
-    <a href="{% url 'profile-update' agent.username %}">Update profile</a>
-</div>
-<hr>
-{% if request.user.is_authenticated %}
-<a href="{% url 'create' %}">Create object</a>
-{% endif %}
-<div class="container">
-    {% for house in houses %}
-    <a href="{% url 'house' house.id %}">
-        <h4>{{house.location}}</h4>
-        <h5>{{house.house_type}}</h5>
-        <p>{{house.price|floatformat:2}}</p>
-    </a>
-    {% if request.user == agent %}
-    <a href="{% url 'update' house.id %}">Update</a> <a href="{% url 'delete' house.id %}">Delete</a>
-    {% endif %}
-    <hr>
-    {% endfor %}
-</div>
+<!--/ Agent Single Star /-->
+<section class="agent-single">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="agent-avatar-box">
+              <img src="{{agent.avatar.url}}" alt="" class="agent-avatar img-fluid" width="500" height="500">
+            </div>
+          </div>
+          <div class="col-md-5 section-md-t3">
+            <div class="agent-info-box">
+              <div class="agent-title">
+                <div class="title-box-d">
+                  <h3 class="title-d">{{agent.first_name}}
+                    <br>{{agent.last_name}}</h3>
+                </div>
+              </div>
+              <div class="agent-content mb-3">
+                <p class="content-d color-text-a">
+                  {{agent.about}}
+                </p>
+                <div class="info-agents color-a">
+                  <p>
+                    <strong>Phone: </strong>
+                    <span class="color-text-a"> {{agent.phone_no}} </span>
+                  </p>
+                  <p>
+                    <strong>Email: </strong>
+                    <span class="color-text-a">{{agent.email}}</span>
+                  </p>
+                  <p>
+                    <strong>skype: </strong>
+                    <span class="color-text-a">{{agent.skype}}</span>
+                  </p>
+                </div>
+              </div>
+              {% if request.user == agent %}
+              <div class="col-md-12">
+                <a href="{% url 'profile-update' agent.username %}" class="btn btn-a">Update profile</a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 section-t8">
+        <div class="title-box-d">
+          <h3 class="title-d">{{agent.username|title}}'s Properties (6)</h3>
+        </div>
+      </div>
+      <div class="row property-grid grid">
+        <div class="col-sm-12">
+          <div class="grid-option">
+            <form>
+              <select class="custom-select">
+                <option selected>All</option>
+                <option value="2">For Rent</option>
+                <option value="3">For Sale</option>
+              </select>
+            </form>
+          </div>
+        </div>
+        {% if request.user.is_authenticated %}
+        <div style="margin-bottom: 20px;" class="col-md-12">
+          <a href="{% url 'create' %}" class="btn btn-a">Create new project</a>
+        </div>
+        {% endif %}
+        {% for house in houses %}
+        <div class="col-md-4">
+          <div class="card-box-a card-shadow">
+            <div class="img-box-a">
+              <img src="{{house.image_one_url}}" alt="" class="img-a img-fluid" width="600" height="800">
+            </div>
+            <div class="card-overlay">
+              <div class="card-overlay-a-content">
+                <div class="card-header-a">
+                  <h2 class="card-title-a">
+                    <a href="{% url 'house' house.id %}">{{house.house_type}}
+                      <br /> {{house.location}}</a>
+                  </h2>
+                </div>
+                <div class="card-body-a">
+                  <div class="price-box d-flex">
+                    <span class="price-a">rent | $ {{house.price}}</span>
+                  </div>
+                  <a href="{% url 'house' house.id %}" class="link-a">Click for more...
+                    <span class="ion-ios-arrow-forward"></span>
+                  </a>
+                </div>
+                <div class="card-footer-a">
+                  <ul class="card-info d-flex justify-content-around">
+                    <li>
+                      <h4 class="card-info-title">Area</h4>
+                      <span>{{house.area_per_meter_square}}m
+                          <sup>2</sup>
+                        </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Beds</h4>
+                      <span>{{house.no_of_bedrooms}}</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Bathroom</h4>
+                      <span>{{house.no_of_bathroom}}</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Garages</h4>
+                      {% if house.garage == False %}
+                      <span>No</span>
+                      {% else %}
+                      <span>Yes</span>
+                      {% endif %}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body-a">
+            <div class="price-box">
+              {% if request.user == agent %}
+              <a href="{% url 'update' house.id %}" class="btn btn-b">Update</a>
+              <a href="{% url 'delete' house.id %}" class="btn btn-b">Delete</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Agent Single End /-->
+{% endblock %}
